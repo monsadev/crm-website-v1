@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { Glow } from '@/components/motion/Glow';
 
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -14,16 +15,8 @@ export function PageHero({ eyebrow, title, description, children, className, ali
     <section className={cn('relative isolate overflow-hidden pt-36 pb-16 sm:pt-44 sm:pb-24', className)}>
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="bg-grid mask-radial absolute inset-0 opacity-80" />
-        <motion.div
-          className="absolute -top-40 left-[10%] size-[30rem] rounded-full bg-brand/20 blur-[130px]"
-          animate={{ x: [0, 60, 0], y: [0, 30, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -top-20 right-[8%] size-[26rem] rounded-full bg-violet-400/20 blur-[130px]"
-          animate={{ x: [0, -50, 0], y: [0, 40, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <Glow color="brand" alpha={0.2} motion="drift" dur={18} dx={60} dy={30} className="-top-56 left-[4%] size-[42rem]" />
+        <Glow color="violet" alpha={0.22} motion="drift" dur={22} dx={-50} dy={40} className="-top-36 right-[2%] size-[38rem]" />
       </div>
       <div className={cn('mx-auto flex w-full max-w-7xl flex-col gap-6 px-5 sm:px-8', center ? 'items-center text-center' : 'items-start')}>
         {eyebrow && (

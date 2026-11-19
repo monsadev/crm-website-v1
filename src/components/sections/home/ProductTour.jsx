@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { Glow } from '@/components/motion/Glow';
 
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
@@ -78,7 +79,7 @@ export function ProductTour({ open, onOpenChange }) {
         <div className="grid lg:grid-cols-[320px_1fr]">
           <div className="relative flex flex-col justify-between gap-8 bg-ink p-7 text-white">
             <div className="bg-grid-dark mask-radial pointer-events-none absolute inset-0 opacity-50" />
-            <div className="pointer-events-none absolute -bottom-20 -left-10 size-56 rounded-full bg-brand/50 blur-[90px]" />
+            <Glow color="brand" alpha={0.5} className="-bottom-36 -left-28 size-[26rem]" />
             <div className="relative">
               <p className="font-mono text-xs tracking-widest text-sky-300 uppercase">Product tour</p>
               <DialogTitle className="mt-3 text-3xl leading-tight text-white">A quick look inside</DialogTitle>

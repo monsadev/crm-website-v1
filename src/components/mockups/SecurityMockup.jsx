@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useInView } from 'motion/react';
 import { BellRing, Fingerprint, KeyRound, Laptop, Mail, ScrollText, ShieldCheck, Smartphone } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -22,27 +22,33 @@ const methods = [
 ];
 
 export function SecurityMockup({ className, dark = false }) {
+  const rootRef = useRef(null);
+  // Timers only run while the mockup is on screen, so it does no work during the rest of the page.
+  const visible = useInView(rootRef, { margin: '120px 0px' });
   const [filled, setFilled] = useState(0);
   const [method, setMethod] = useState(0);
   const verified = filled >= code.length;
 
   // Type the code one digit at a time, hold on "verified", then restart.
   useEffect(() => {
+    if (!visible) return undefined;
     const t = setInterval(() => setFilled((f) => (f >= code.length + 3 ? 0 : f + 1)), 600);
     return () => clearInterval(t);
-  }, []);
+  }, [visible]);
 
   useEffect(() => {
+    if (!visible) return undefined;
     const t = setInterval(() => setMethod((m) => (m + 1) % methods.length), 4200);
     return () => clearInterval(t);
-  }, []);
+  }, [visible]);
 
-  const card = dark ? 'border-white/10 bg-white/[0.06] backdrop-blur-xl' : 'border-slate-200 bg-white';
+  // Solid fills instead of backdrop blur: blur behind a moving card is re-filtered every scroll frame.
+  const card = dark ? 'border-white/10 bg-[#0d1428]' : 'border-slate-200 bg-white';
   const strong = dark ? 'text-white' : 'text-slate-900';
   const soft = dark ? 'text-slate-400' : 'text-slate-500';
 
   return (
-    <div className={cn('relative mx-auto flex w-full max-w-[520px] flex-col gap-4', className)}>
+    <div ref={rootRef} className={cn('relative mx-auto flex w-full max-w-[520px] flex-col gap-4', className)}>
       {/* Verify card */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -151,7 +157,7 @@ export function SecurityMockup({ className, dark = false }) {
         transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
         className={cn(
           'relative z-20 rounded-2xl border p-4 shadow-[0_30px_60px_-26px_rgba(2,6,23,0.5)] sm:ml-auto sm:w-[86%]',
-          dark ? 'border-white/10 bg-ink-2/90 backdrop-blur-xl' : 'border-slate-200 bg-white',
+          dark ? 'border-white/10 bg-ink-2' : 'border-slate-200 bg-white',
         )}
       >
         <div className="mb-2.5 flex items-center justify-between">
@@ -203,10 +209,10 @@ export function SecurityMockup({ className, dark = false }) {
         transition={{ type: 'spring', stiffness: 180, damping: 16, delay: 0.9 }}
         className="relative z-20 hidden w-[70%] sm:block"
       >
-        <motion.div
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          style={{ '--amp': '6px' }}
           className={cn(
+            'anim-bob',
             'flex items-center gap-3 rounded-2xl border p-3',
             dark ? 'border-amber-400/20 bg-[#1b1530]/95' : 'border-amber-200 bg-amber-50',
           )}
@@ -218,7 +224,7 @@ export function SecurityMockup({ className, dark = false }) {
             <p className={cn('text-[11px] font-semibold', strong)}>Off-hours login alert</p>
             <p className={cn('truncate text-[9.5px]', soft)}>Sunday 11:48 PM &middot; Email sent to security team</p>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   );

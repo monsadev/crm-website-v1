@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ArrowUpRight, CalendarCheck, Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { Glow } from '@/components/motion/Glow';
 
 import { site } from '@/config/site';
 import { ContactForm } from '@/components/forms/ContactForm';
@@ -60,11 +61,7 @@ export function ContactContent() {
                 className="group relative block overflow-hidden rounded-3xl bg-ink p-7 text-white"
               >
                 <div className="bg-grid-dark mask-radial pointer-events-none absolute inset-0 opacity-60" />
-                <motion.div
-                  className="pointer-events-none absolute -top-14 -right-14 size-48 rounded-full bg-brand/60 blur-[70px]"
-                  animate={{ scale: [1, 1.25, 1] }}
-                  transition={{ duration: 6, repeat: Infinity }}
-                />
+                <Glow color="brand" alpha={0.6} motion="breathe" dur={6} className="-top-24 -right-24 size-72" />
                 <div className="relative flex items-center gap-4">
                   <span className="flex size-12 items-center justify-center rounded-2xl bg-white/10 text-sky-300">
                     <CalendarCheck className="size-6" />

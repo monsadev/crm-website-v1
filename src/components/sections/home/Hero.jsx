@@ -2,10 +2,11 @@
 
 import { useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react';
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react';
 import { ArrowRight, BellRing, CheckCircle2, Play, ShieldCheck, Sparkles, UserPlus, Wallet } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Glow } from '@/components/motion/Glow';
 import { Magnetic } from '@/components/motion/Magnetic';
 import { Reveal } from '@/components/motion/Reveal';
 import { SplitHeading } from '@/components/motion/SplitHeading';
@@ -22,23 +23,20 @@ function FloatingCard({ className, delay, from = 'left', amplitude = 9, children
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, scale: 0.6, x: from === 'left' ? -40 : 40, filter: 'blur(8px)' }}
-      animate={{ opacity: 1, scale: 1, x: 0, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, scale: 0.6, x: from === 'left' ? -40 : 40 }}
+      animate={{ opacity: 1, scale: 1, x: 0 }}
       transition={{ type: 'spring', stiffness: 160, damping: 16, delay }}
     >
-      <motion.div
-        animate={{ y: [0, -amplitude, 0] }}
-        transition={{ duration: 5 + delay, repeat: Infinity, ease: 'easeInOut', delay: delay + 0.6 }}
-      >
+      <div className="anim-bob" style={{ '--amp': `${amplitude}px`, '--dur': `${5 + delay}s`, '--delay': `${delay + 0.6}s` }}>
         {children}
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
 
 function Toast({ icon: Ico, tone, title, text }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/95 px-3.5 py-2.5 text-left shadow-[0_24px_50px_-18px_rgba(2,6,23,0.4)] backdrop-blur xl:px-4 xl:py-3">
+    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5 text-left shadow-[0_24px_50px_-18px_rgba(2,6,23,0.4)] xl:px-4 xl:py-3">
       <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${tone}`}>
         <Ico className="size-4" />
       </span>
@@ -55,18 +53,18 @@ export function Hero() {
   const sectionRef = useRef(null);
   const shotRef = useRef(null);
 
-  // Cursor-following spotlight on the hero backdrop.
-  const mx = useMotionValue(50);
-  const my = useMotionValue(30);
+  // Cursor-following spotlight: a pre-painted glow layer that is only translated (GPU),
+  // instead of a gradient that would be repainted on every frame.
+  const mx = useMotionValue(-2000);
+  const my = useMotionValue(-2000);
   const sx = useSpring(mx, { stiffness: 60, damping: 20 });
   const sy = useSpring(my, { stiffness: 60, damping: 20 });
-  const spotlight = useMotionTemplate`radial-gradient(600px circle at ${sx}% ${sy}%, rgba(25,76,255,0.13), transparent 65%)`;
 
   function onMove(e) {
     const r = sectionRef.current?.getBoundingClientRect();
     if (!r) return;
-    mx.set(((e.clientX - r.left) / r.width) * 100);
-    my.set(((e.clientY - r.top) / r.height) * 100);
+    mx.set(e.clientX - r.left - 600);
+    my.set(e.clientY - r.top - 600);
   }
 
   // Product shot straightens and grows as it scrolls in, then drifts up slightly.
@@ -84,31 +82,19 @@ export function Hero() {
       {/* Backdrop */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="bg-grid mask-radial absolute inset-0 opacity-80" />
-        <motion.div className="absolute inset-0" style={{ background: spotlight }} />
         <motion.div
-          className="absolute -top-40 left-[8%] size-[34rem] rounded-full bg-brand/25 blur-[130px]"
-          animate={{ x: [0, 70, 0], y: [0, 40, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-0 left-0 size-[1200px] rounded-full"
+          style={{ x: sx, y: sy, background: 'radial-gradient(closest-side, rgba(25,76,255,0.12), transparent)' }}
         />
-        <motion.div
-          className="absolute -top-24 right-[4%] size-[30rem] rounded-full bg-violet-400/25 blur-[130px]"
-          animate={{ x: [0, -60, 0], y: [0, 50, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-72 left-1/2 size-[26rem] -translate-x-1/2 rounded-full bg-sky-300/25 blur-[120px]"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <Glow color="brand" alpha={0.22} motion="drift" dur={18} dx={70} dy={40} className="-top-56 left-[2%] size-[46rem]" />
+        <Glow color="violet" alpha={0.24} motion="drift" dur={22} dx={-60} dy={50} className="-top-40 right-[-4%] size-[42rem]" />
+        <Glow color="sky" alpha={0.24} motion="breathe" dur={12} className="top-56 left-[calc(50%-18rem)] size-[36rem]" />
         {/* Light beams */}
         {[18, 50, 82].map((left, i) => (
-          <motion.span
+          <span
             key={left}
-            className="absolute top-0 h-[60%] w-px bg-gradient-to-b from-transparent via-brand/40 to-transparent"
-            style={{ left: `${left}%` }}
-            initial={{ opacity: 0, y: '-60%' }}
-            animate={{ opacity: [0, 1, 0], y: ['-60%', '60%'] }}
-            transition={{ duration: 6, delay: 1.5 + i * 1.8, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
+            className="anim-beam absolute top-0 h-[60%] w-px bg-gradient-to-b from-transparent via-brand/40 to-transparent"
+            style={{ left: `${left}%`, '--dur': '9s', '--delay': `${1.5 + i * 1.8}s` }}
           />
         ))}
       </div>

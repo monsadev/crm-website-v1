@@ -18,9 +18,15 @@ function ScoreVisual() {
         <span className="font-display text-base">82</span>
       </Ring>
       <div className="flex flex-col gap-1.5">
-        <Tag tone="red"><Flame className="size-3" /> Hot</Tag>
-        <Tag tone="amber"><Sun className="size-3" /> Warm</Tag>
-        <Tag tone="blue"><Snowflake className="size-3" /> Cold</Tag>
+        <Tag tone="red">
+          <Flame className="size-3" /> Hot
+        </Tag>
+        <Tag tone="amber">
+          <Sun className="size-3" /> Warm
+        </Tag>
+        <Tag tone="blue">
+          <Snowflake className="size-3" /> Cold
+        </Tag>
       </div>
     </div>
   );
@@ -31,23 +37,29 @@ function RoundRobinVisual() {
   return (
     <div className="relative mx-auto flex size-28 items-center justify-center">
       <span className="absolute inset-0 rounded-full border border-dashed border-slate-300" />
-      <motion.div className="absolute inset-0" animate={{ rotate: 360 }} transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}>
+      <div className="anim-spin absolute inset-0" style={{ '--dur': '16s' }}>
         {people.map((p, i) => {
           const a = (i / people.length) * Math.PI * 2;
           return (
             <span
               key={p}
               className="absolute"
-              style={{ left: `${50 + Math.cos(a) * 50}%`, top: `${50 + Math.sin(a) * 50}%`, transform: 'translate(-50%,-50%)' }}
+              style={{
+                left: `${50 + Math.cos(a) * 50}%`,
+                top: `${50 + Math.sin(a) * 50}%`,
+                transform: 'translate(-50%,-50%)',
+              }}
             >
-              <motion.span className="block" animate={{ rotate: -360 }} transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}>
+              <span className="anim-spin-rev block" style={{ '--dur': '16s' }}>
                 <Avatar name={p} tone={i} />
-              </motion.span>
+              </span>
             </span>
           );
         })}
-      </motion.div>
-      <span className="flex size-10 items-center justify-center rounded-full bg-brand font-display text-xs font-semibold text-white">Lead</span>
+      </div>
+      <span className="flex size-10 items-center justify-center rounded-full bg-brand font-display text-xs font-semibold text-white">
+        Lead
+      </span>
     </div>
   );
 }
@@ -87,7 +99,9 @@ function WhatsAppVisual() {
           transition={{ delay: 0.25 * i, duration: 0.5, ease: EASE }}
           className={cn(
             'max-w-[78%] rounded-2xl px-3 py-2 text-[12px] shadow-sm',
-            b.me ? 'self-end rounded-tr-sm bg-[#d9fdd3] text-slate-800' : 'self-start rounded-tl-sm bg-white text-slate-700 ring-1 ring-slate-100'
+            b.me
+              ? 'self-end rounded-tr-sm bg-[#d9fdd3] text-slate-800'
+              : 'self-start rounded-tl-sm bg-white text-slate-700 ring-1 ring-slate-100',
           )}
         >
           {b.t}
@@ -101,19 +115,19 @@ function WhatsAppVisual() {
 function QrVisual() {
   const r = seeded(5);
   const cells = Array.from({ length: 49 }, () => r() > 0.5);
+  // One animated container instead of 49 individually observed cells.
   return (
-    <div className="grid size-20 grid-cols-7 gap-[2px] rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.85 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className="grid size-20 grid-cols-7 gap-[2px] rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200"
+    >
       {cells.map((on, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: i * 0.012 }}
-          className={cn('aspect-square rounded-[1px]', on ? 'bg-ink-2' : 'bg-transparent')}
-        />
+        <span key={i} className={cn('aspect-square rounded-[1px]', on ? 'bg-ink-2' : 'bg-transparent')} />
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -191,7 +205,10 @@ export function BentoGrid() {
         description="Smart defaults and automation in every corner, so your team spends time on conversations rather than admin."
       />
 
-      <Stagger className="relative mt-16 grid auto-rows-[minmax(250px,auto)] gap-5 sm:grid-cols-2 lg:grid-cols-4" stagger={0.08}>
+      <Stagger
+        className="relative mt-16 grid auto-rows-[minmax(250px,auto)] gap-5 sm:grid-cols-2 lg:grid-cols-4"
+        stagger={0.08}
+      >
         {bento.map((b) => {
           const Visual = visuals[b.id];
           return (

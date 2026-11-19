@@ -62,11 +62,10 @@ function LeadCard({ lead, i, col }) {
       )}
     >
       {lead.pulse && (
-        <motion.span
-          className="absolute -top-1.5 -right-1.5 size-3 rounded-full bg-brand"
-          animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-          transition={{ duration: 1.8, repeat: Infinity }}
-        />
+        <span className="absolute -top-1.5 -right-1.5 flex size-3">
+          <span className="absolute inset-0 animate-ping rounded-full bg-brand/60" />
+          <span className="relative size-3 rounded-full bg-brand" />
+        </span>
       )}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">

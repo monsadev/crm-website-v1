@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { Compass, Target } from 'lucide-react';
+import { Glow } from '@/components/motion/Glow';
 
 import { Icon } from '@/components/Icon';
 import { Counter } from '@/components/motion/Counter';
@@ -22,14 +23,16 @@ function ScrollStatement() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 80%', 'end 40%'] });
   const words =
     'We believe admissions teams should spend their day talking to learners, not chasing spreadsheets. So we built one place where every enquiry, conversation, payment and certificate lives together.'.split(
-      ' '
+      ' ',
     );
   return (
     <section ref={ref} className="relative mx-auto max-w-5xl px-5 py-24 sm:px-8 sm:py-32">
       <p className="font-display text-[clamp(1.6rem,3.6vw,2.9rem)] leading-[1.25] font-medium tracking-tight">
         {words.map((w, i) => {
           const start = i / words.length;
-          return <Word key={`${w}-${i}`} word={w} progress={scrollYProgress} range={[start, start + 1 / words.length]} />;
+          return (
+            <Word key={`${w}-${i}`} word={w} progress={scrollYProgress} range={[start, start + 1 / words.length]} />
+          );
         })}
       </p>
     </section>
@@ -53,7 +56,10 @@ function Timeline() {
   return (
     <div ref={ref} className="relative mx-auto mt-16 max-w-4xl">
       <span className="absolute top-0 bottom-0 left-4 w-px bg-slate-200 sm:left-1/2" />
-      <motion.span style={{ scaleY }} className="absolute top-0 bottom-0 left-[15px] w-[3px] origin-top rounded bg-gradient-to-b from-brand to-violet-500 sm:left-[calc(50%-1px)]" />
+      <motion.span
+        style={{ scaleY }}
+        className="absolute top-0 bottom-0 left-[15px] w-[3px] origin-top rounded bg-gradient-to-b from-brand to-violet-500 sm:left-[calc(50%-1px)]"
+      />
       <ol className="flex flex-col gap-12">
         {timeline.map((t, i) => {
           const right = i % 2 === 1;
@@ -67,8 +73,8 @@ function Timeline() {
                 className="absolute top-6 left-[7px] z-10 size-5 rounded-full border-4 border-white bg-brand shadow-[0_0_0_4px_rgba(25,76,255,0.18)] sm:left-[calc(50%-10px)]"
               />
               <motion.div
-                initial={{ opacity: 0, x: right ? 60 : -60, filter: 'blur(8px)' }}
-                whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                initial={{ opacity: 0, x: right ? 60 : -60 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.8, ease: EASE }}
                 className={right ? 'sm:col-start-2 sm:pl-12' : 'sm:pr-12 sm:text-right'}
@@ -160,14 +166,48 @@ export function AboutContent() {
                 }
               >
                 {c.dark && <div className="bg-grid-dark mask-radial pointer-events-none absolute inset-0 opacity-60" />}
-                <div className={c.dark ? 'pointer-events-none absolute -top-16 -right-16 size-64 rounded-full bg-brand/50 blur-[90px]' : 'pointer-events-none absolute -bottom-16 -left-16 size-64 rounded-full bg-violet-300/30 blur-[90px]'} />
+                {c.dark ? (
+                  <Glow color="brand" alpha={0.5} className="-top-32 -right-32 size-[26rem]" />
+                ) : (
+                  <Glow color="violet-light" alpha={0.35} className="-bottom-32 -left-32 size-[26rem]" />
+                )}
                 <div className="relative">
-                  <span className={c.dark ? 'flex size-12 items-center justify-center rounded-2xl bg-white/10 text-sky-300' : 'flex size-12 items-center justify-center rounded-2xl bg-brand/10 text-brand'}>
+                  <span
+                    className={
+                      c.dark
+                        ? 'flex size-12 items-center justify-center rounded-2xl bg-white/10 text-sky-300'
+                        : 'flex size-12 items-center justify-center rounded-2xl bg-brand/10 text-brand'
+                    }
+                  >
                     <c.icon className="size-6" />
                   </span>
-                  <p className={c.dark ? 'mt-6 font-mono text-xs tracking-widest text-sky-300 uppercase' : 'mt-6 font-mono text-xs tracking-widest text-brand uppercase'}>{c.label}</p>
-                  <h3 className={c.dark ? 'mt-2 font-display text-3xl font-semibold' : 'mt-2 font-display text-3xl font-semibold text-ink-2'}>{c.title}</h3>
-                  <p className={c.dark ? 'mt-4 text-[16px] leading-relaxed text-slate-300' : 'mt-4 text-[16px] leading-relaxed text-slate-600'}>{c.text}</p>
+                  <p
+                    className={
+                      c.dark
+                        ? 'mt-6 font-mono text-xs tracking-widest text-sky-300 uppercase'
+                        : 'mt-6 font-mono text-xs tracking-widest text-brand uppercase'
+                    }
+                  >
+                    {c.label}
+                  </p>
+                  <h3
+                    className={
+                      c.dark
+                        ? 'mt-2 font-display text-3xl font-semibold'
+                        : 'mt-2 font-display text-3xl font-semibold text-ink-2'
+                    }
+                  >
+                    {c.title}
+                  </h3>
+                  <p
+                    className={
+                      c.dark
+                        ? 'mt-4 text-[16px] leading-relaxed text-slate-300'
+                        : 'mt-4 text-[16px] leading-relaxed text-slate-600'
+                    }
+                  >
+                    {c.text}
+                  </p>
                 </div>
               </div>
             </Reveal>
@@ -208,8 +248,8 @@ export function AboutContent() {
             className="text-[clamp(1.8rem,3.4vw,2.6rem)] font-semibold text-ink-2"
           />
           <p className="max-w-2xl text-[16px] leading-relaxed text-slate-600">
-            WsCube Tech is an education company that trains learners online and across its centres. WsCube CRM grew out of running that operation every
-            day, and every module is tested on a real admissions floor before it ships.
+            WsCube Tech is an education company that trains learners online and across its centres. WsCube CRM grew out
+            of running that operation every day, and every module is tested on a real admissions floor before it ships.
           </p>
         </Reveal>
       </section>

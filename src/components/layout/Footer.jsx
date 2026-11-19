@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ArrowUp, ArrowUpRight, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
+import { Glow } from '@/components/motion/Glow';
 
 import { site } from '@/config/site';
 import { modules } from '@/data/product';
@@ -29,7 +30,7 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-ink text-white">
       <div className="bg-grid-dark mask-fade-y pointer-events-none absolute inset-0 opacity-50" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[60rem] -translate-x-1/2 rounded-full bg-brand/25 blur-[140px]" />
+      <Glow color="brand" alpha={0.28} className="-top-64 left-1/2 h-[36rem] w-[80rem] -translate-x-1/2" />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 pt-20 sm:px-8">
         <Stagger className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.1fr]">

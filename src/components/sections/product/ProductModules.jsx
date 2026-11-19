@@ -23,7 +23,7 @@ function ModuleNav({ active }) {
   }, [active]);
 
   return (
-    <div className="sticky top-[76px] z-30 border-y border-slate-200/80 bg-white/80 backdrop-blur-xl">
+    <div className="sticky top-[76px] z-30 border-y border-slate-200/80 bg-white/95 backdrop-blur-sm">
       <div ref={listRef} className="no-scrollbar mx-auto flex max-w-7xl gap-1 overflow-x-auto px-5 py-2.5 sm:px-8">
         {modules.map((m) => {
           const on = active === m.id;
@@ -34,11 +34,15 @@ function ModuleNav({ active }) {
               data-id={m.id}
               className={cn(
                 'relative inline-flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-medium whitespace-nowrap transition-colors duration-300',
-                on ? 'text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-ink-2'
+                on ? 'text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-ink-2',
               )}
             >
               {on && (
-                <motion.span layoutId="module-nav-pill" className="absolute inset-0 rounded-full bg-brand" transition={{ type: 'spring', stiffness: 400, damping: 34 }} />
+                <motion.span
+                  layoutId="module-nav-pill"
+                  className="absolute inset-0 rounded-full bg-brand"
+                  transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                />
               )}
               <Icon name={m.icon} className="relative size-4" />
               <span className="relative">{m.title}</span>
@@ -75,7 +79,11 @@ function ModuleBlock({ m, index, onActive }) {
             </div>
           </Reveal>
 
-          <SplitHeading text={m.tagline} className="mt-6 text-[clamp(1.8rem,3.4vw,2.7rem)] leading-[1.12] font-semibold text-ink-2" stagger={0.03} />
+          <SplitHeading
+            text={m.tagline}
+            className="mt-6 text-[clamp(1.8rem,3.4vw,2.7rem)] leading-[1.12] font-semibold text-ink-2"
+            stagger={0.03}
+          />
 
           <Reveal delay={0.1}>
             <p className="mt-5 text-[16px] leading-relaxed text-slate-600">{m.description}</p>
@@ -83,7 +91,11 @@ function ModuleBlock({ m, index, onActive }) {
 
           <Stagger className="mt-8 flex flex-col gap-3" stagger={0.06}>
             {m.bullets.map((b) => (
-              <StaggerItem key={b} direction="right" className="flex items-start gap-3 text-[15px] leading-snug text-slate-700">
+              <StaggerItem
+                key={b}
+                direction="right"
+                className="flex items-start gap-3 text-[15px] leading-snug text-slate-700"
+              >
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
                   <Check className="size-3" strokeWidth={3} />
                 </span>

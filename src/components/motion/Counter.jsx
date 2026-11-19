@@ -1,28 +1,33 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { animate, useInView } from 'motion/react';
 
+// Counts up once when visible. Writes straight to the DOM node, so it never
+// triggers React re-renders while animating.
 export function Counter({ to, duration = 1.8, prefix = '', suffix = '', decimals = 0, className }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
-  const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!inView) return undefined;
+    if (!inView || !ref.current) return undefined;
+    const node = ref.current;
     const controls = animate(0, to, {
       duration,
       ease: [0.22, 1, 0.36, 1],
-      onUpdate: (latest) => setValue(latest),
+      onUpdate: (latest) => {
+        // Update React's own text node in place so reconciliation stays valid.
+        const text = `${prefix}${latest.toFixed(decimals)}${suffix}`;
+        if (node.firstChild) node.firstChild.nodeValue = text;
+        else node.textContent = text;
+      },
     });
     return () => controls.stop();
-  }, [inView, to, duration]);
+  }, [inView, to, duration, prefix, suffix, decimals]);
 
   return (
     <span ref={ref} className={className}>
-      {prefix}
-      {value.toFixed(decimals)}
-      {suffix}
+      {`${prefix}${(0).toFixed(decimals)}${suffix}`}
     </span>
   );
 }

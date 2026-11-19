@@ -37,7 +37,8 @@ export function Journey() {
                 initial={{ opacity: 0, scale: 0.6 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8 }}
-                className="pointer-events-none absolute -top-16 -right-16 size-64 rounded-full bg-brand/60 blur-[90px]"
+                className="glow-blob -top-32 -right-32 size-[26rem]"
+                style={{ '--glow-rgb': '25 76 255', '--glow-a': 0.6 }}
               />
               <div className="relative">
                 <div className="flex items-center justify-between">
@@ -46,7 +47,10 @@ export function Journey() {
                     {journey.map((j, i) => (
                       <span
                         key={j.id}
-                        className={cn('h-1 rounded-full transition-all duration-500', i === active ? 'w-8 bg-sky-300' : 'w-2 bg-white/20')}
+                        className={cn(
+                          'h-1 rounded-full transition-all duration-500',
+                          i === active ? 'w-8 bg-sky-300' : 'w-2 bg-white/20',
+                        )}
                       />
                     ))}
                   </div>
@@ -54,9 +58,9 @@ export function Journey() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={current.id}
-                    initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -24, filter: 'blur(8px)' }}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -24 }}
                     transition={{ duration: 0.5, ease: EASE }}
                     className="mt-6"
                   >
@@ -96,30 +100,41 @@ export function Journey() {
                   animate={{ scale: isActive ? 1.15 : 1 }}
                   className={cn(
                     'absolute top-6 -left-10 z-10 flex size-8 items-center justify-center rounded-full border-2 bg-white text-xs font-bold transition-colors duration-500 sm:-left-14 sm:size-10',
-                    isActive ? 'border-brand bg-brand text-white shadow-[0_0_0_6px_rgba(25,76,255,0.15)]' : isPast ? 'border-brand/60 text-brand' : 'border-slate-300 text-slate-400'
+                    isActive
+                      ? 'border-brand bg-brand text-white shadow-[0_0_0_6px_rgba(25,76,255,0.15)]'
+                      : isPast
+                        ? 'border-brand/60 text-brand'
+                        : 'border-slate-300 text-slate-400',
                   )}
                 >
                   {i + 1}
                 </motion.span>
 
                 <motion.div
-                  initial={{ opacity: 0, x: 50, filter: 'blur(8px)' }}
-                  whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8, ease: EASE }}
                   className={cn(
                     'rounded-3xl border bg-white p-6 transition-all duration-500 sm:p-8',
-                    isActive ? 'border-brand/30 shadow-[0_30px_70px_-30px_rgba(25,76,255,0.35)]' : 'border-slate-200'
+                    isActive ? 'border-brand/30 shadow-[0_30px_70px_-30px_rgba(25,76,255,0.35)]' : 'border-slate-200',
                   )}
                 >
                   <div className="flex items-start gap-4">
-                    <span className={cn('flex size-12 shrink-0 items-center justify-center rounded-2xl transition-colors duration-500', isActive ? 'bg-brand text-white' : 'bg-slate-100 text-slate-600')}>
+                    <span
+                      className={cn(
+                        'flex size-12 shrink-0 items-center justify-center rounded-2xl transition-colors duration-500',
+                        isActive ? 'bg-brand text-white' : 'bg-slate-100 text-slate-600',
+                      )}
+                    >
                       <Icon name={step.icon} className="size-6" />
                     </span>
                     <div>
                       <h3 className="font-display text-2xl font-semibold text-ink-2">{step.title}</h3>
                       <p className="mt-2 text-[16px] leading-relaxed text-slate-600">{step.text}</p>
-                      <p className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{step.tag}</p>
+                      <p className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                        {step.tag}
+                      </p>
                     </div>
                   </div>
                 </motion.div>

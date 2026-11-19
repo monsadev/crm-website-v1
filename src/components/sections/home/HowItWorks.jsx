@@ -35,7 +35,11 @@ const steps = [
     icon: LineChart,
     title: 'Measure and grow',
     text: 'Track revenue, conversion, due fees and counsellor performance. Double down on the sources and people that deliver.',
-    points: ['Revenue, source and status reports', 'Leaderboards, targets and incentives', 'Exports for leadership reviews'],
+    points: [
+      'Revenue, source and status reports',
+      'Leaderboards, targets and incentives',
+      'Exports for leadership reviews',
+    ],
   },
 ];
 
@@ -98,12 +102,19 @@ export function HowItWorks() {
                       ? 'scale-110 border-brand bg-brand text-white shadow-[0_0_0_8px_rgba(25,76,255,0.14)]'
                       : done
                         ? 'border-brand bg-white text-brand'
-                        : 'border-slate-300 bg-white text-slate-400 hover:border-slate-400'
+                        : 'border-slate-300 bg-white text-slate-400 hover:border-slate-400',
                   )}
                 >
                   {done ? <Check className="size-4" strokeWidth={3} /> : i + 1}
                 </button>
-                <span className={cn('hidden text-[13px] font-medium transition-colors sm:block', current ? 'text-ink-2' : 'text-slate-500')}>{s.title}</span>
+                <span
+                  className={cn(
+                    'hidden text-[13px] font-medium transition-colors sm:block',
+                    current ? 'text-ink-2' : 'text-slate-500',
+                  )}
+                >
+                  {s.title}
+                </span>
               </li>
             );
           })}
@@ -136,7 +147,9 @@ export function HowItWorks() {
               className="grid items-center gap-10 md:grid-cols-[1.2fr_1fr]"
             >
               <div>
-                <p className="font-mono text-xs tracking-widest text-brand uppercase">Step {active + 1} of {steps.length}</p>
+                <p className="font-mono text-xs tracking-widest text-brand uppercase">
+                  Step {active + 1} of {steps.length}
+                </p>
                 <h3 className="mt-3 font-display text-3xl font-semibold text-ink-2">{step.title}</h3>
                 <p className="mt-4 text-[16px] leading-relaxed text-slate-600">{step.text}</p>
                 <ul className="mt-6 flex flex-col gap-3">
@@ -165,13 +178,12 @@ export function HowItWorks() {
               </div>
 
               <div className="relative mx-auto flex aspect-square w-full max-w-[280px] items-center justify-center">
-                <motion.span
-                  className="absolute inset-0 rounded-full border border-dashed border-brand/30"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                <span
+                  className="anim-spin absolute inset-0 rounded-full border border-dashed border-brand/30"
+                  style={{ '--dur': '30s' }}
                 />
                 <span className="absolute inset-6 rounded-full border border-slate-200 bg-slate-50" />
-                <span className="absolute inset-12 rounded-full bg-gradient-to-br from-brand/15 to-violet-400/15 blur-xl" />
+                <span className="absolute inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(25,76,255,0.16),rgba(167,139,250,0.08)_60%,transparent)]" />
                 <motion.span
                   key={`icon-${active}`}
                   initial={{ scale: 0.4, rotate: -30, opacity: 0 }}

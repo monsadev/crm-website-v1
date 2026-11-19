@@ -239,10 +239,12 @@ button:not(:disabled),
   mask-image: radial-gradient(ellipse at center, #000 30%, transparent 72%);
 }
 
+/* Fixed header sits over moving content, so the backdrop filter re-runs every scroll
+   frame. A small radius and a more opaque fill keep that cost low. */
 .glass {
-  background: rgb(255 255 255 / 0.7);
-  -webkit-backdrop-filter: saturate(180%) blur(18px);
-  backdrop-filter: saturate(180%) blur(18px);
+  background: rgb(255 255 255 / 0.86);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  backdrop-filter: saturate(160%) blur(10px);
 }
 
 .glass-dark {
@@ -289,6 +291,143 @@ button:not(:disabled),
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/* ---------- Compositor-only loops ----------
+   Decorative infinite motion runs as CSS transform/opacity keyframes so it stays on the
+   GPU and never competes with scrolling on the main thread. Tune per element with
+   --dur, --delay, --dx, --dy and --amp. Tailwind translate utilities use the separate
+   `translate` property, so they combine with these transforms safely. */
+@keyframes loop-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--dx, 60px), var(--dy, 30px), 0);
+  }
+}
+@keyframes loop-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+@keyframes loop-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, calc(var(--amp, 10px) * -1), 0);
+  }
+}
+@keyframes loop-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loop-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes loop-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(5.2);
+    opacity: 0;
+  }
+}
+@keyframes loop-beam {
+  0% {
+    transform: translate3d(0, -60%, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 60%, 0);
+    opacity: 0;
+  }
+}
+@keyframes loop-wiggle {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-12deg);
+  }
+  20% {
+    transform: rotate(12deg);
+  }
+  30% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes loop-typing {
+  0%,
+  60%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  30% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.anim-drift {
+  animation: loop-drift var(--dur, 18s) ease-in-out var(--delay, 0s) infinite;
+}
+.anim-breathe {
+  animation: loop-breathe var(--dur, 12s) ease-in-out var(--delay, 0s) infinite;
+}
+.anim-bob {
+  animation: loop-bob var(--dur, 5s) ease-in-out var(--delay, 0s) infinite;
+}
+.anim-spin {
+  animation: loop-spin var(--dur, 30s) linear infinite;
+}
+.anim-spin-rev {
+  animation: loop-spin-rev var(--dur, 30s) linear infinite;
+}
+.anim-ripple {
+  animation: loop-ripple var(--dur, 4.5s) ease-out var(--delay, 0s) infinite;
+}
+.anim-beam {
+  animation: loop-beam var(--dur, 9s) ease-in-out var(--delay, 0s) infinite;
+  opacity: 0;
+}
+.anim-wiggle {
+  animation: loop-wiggle var(--dur, 3.6s) ease-in-out var(--delay, 0s) infinite;
+}
+.anim-typing {
+  animation: loop-typing var(--dur, 0.9s) ease-in-out var(--delay, 0s) infinite;
+}
+
+/* Soft glow without a blur filter: a radial gradient is painted once and never re-rasterised. */
+.glow-blob {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--glow-rgb) / var(--glow-a, 0.25)),
+    rgb(var(--glow-rgb) / calc(var(--glow-a, 0.25) * 0.35)) 55%,
+    transparent
+  );
 }
 
 /* Scrollbar */

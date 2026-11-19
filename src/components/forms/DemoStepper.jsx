@@ -16,6 +16,7 @@ import {
   User,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Glow } from '@/components/motion/Glow';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -149,11 +150,7 @@ export function DemoStepper() {
       {/* Side stepper */}
       <aside className="relative overflow-hidden bg-ink p-6 text-white sm:p-8">
         <div className="bg-grid-dark mask-radial pointer-events-none absolute inset-0 opacity-50" />
-        <motion.div
-          className="pointer-events-none absolute -bottom-16 -left-16 size-64 rounded-full bg-brand/50 blur-[90px]"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
+        <Glow color="brand" alpha={0.5} motion="breathe" dur={8} className="-bottom-32 -left-32 size-[26rem]" />
         <div className="relative">
           <p className="font-mono text-xs tracking-widest text-sky-300 uppercase">Book a demo</p>
           <p className="mt-2 font-display text-2xl font-semibold">30 minutes, tailored to you</p>
@@ -241,9 +238,9 @@ export function DemoStepper() {
               key={step}
               custom={direction}
               variants={{
-                enter: (d) => ({ opacity: 0, x: d * 70, filter: 'blur(6px)' }),
-                center: { opacity: 1, x: 0, filter: 'blur(0px)' },
-                exit: (d) => ({ opacity: 0, x: d * -70, filter: 'blur(6px)' }),
+                enter: (d) => ({ opacity: 0, x: d * 70 }),
+                center: { opacity: 1, x: 0 },
+                exit: (d) => ({ opacity: 0, x: d * -70 }),
               }}
               initial="enter"
               animate="center"

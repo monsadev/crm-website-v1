@@ -55,13 +55,9 @@ export function LeadDetailMockup({ className }) {
             transition={{ delay: 0.5, duration: 0.6, ease: EASE }}
             className="mt-3 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-2.5"
           >
-            <motion.span
-              animate={{ rotate: [0, -12, 12, -8, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, repeatDelay: 2.2 }}
-              className="flex size-8 items-center justify-center rounded-lg bg-white text-amber-600 shadow-sm"
-            >
+            <span className="anim-wiggle flex size-8 items-center justify-center rounded-lg bg-white text-amber-600 shadow-sm">
               <BellRing className="size-4" />
-            </motion.span>
+            </span>
             <div>
               <p className="text-[10.5px] font-semibold text-amber-800">Follow-up due in 2 hours</p>
               <p className="text-[9.5px] text-amber-700/80">Confirm EMI plan and share the payment link</p>

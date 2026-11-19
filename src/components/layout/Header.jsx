@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import { ArrowRight, Mail, Phone } from 'lucide-react';
+import { Glow } from '@/components/motion/Glow';
 
 import { cn } from '@/lib/utils';
 import { site } from '@/config/site';
@@ -140,7 +141,7 @@ export function Header() {
             className="fixed inset-0 z-40 flex flex-col bg-ink px-6 pt-28 pb-8 text-white lg:hidden"
           >
             <div className="bg-grid-dark mask-radial pointer-events-none absolute inset-0 opacity-60" />
-            <div className="pointer-events-none absolute -top-24 -right-24 size-80 rounded-full bg-brand/40 blur-[110px]" />
+            <Glow color="brand" alpha={0.45} className="-top-48 -right-48 size-[34rem]" />
             <motion.ul
               initial="hidden"
               animate="visible"

@@ -23,10 +23,9 @@ function Ring({ ring, offset }) {
         ring.size,
       )}
     >
-      <motion.div
-        className="absolute inset-0"
-        animate={{ rotate: ring.reverse ? -360 : 360 }}
-        transition={{ duration: ring.duration, repeat: Infinity, ease: 'linear' }}
+      <div
+        className={cn('absolute inset-0', ring.reverse ? 'anim-spin-rev' : 'anim-spin')}
+        style={{ '--dur': `${ring.duration}s` }}
       >
         {ring.items.map((idx, i) => {
           const a = (i / ring.items.length) * Math.PI * 2 + offset;
@@ -42,10 +41,9 @@ function Ring({ ring, offset }) {
               }}
             >
               {/* Counter-rotate so the chip stays upright. Icon only, so chips never collide; name shows on hover. */}
-              <motion.span
-                className="group/chip relative flex"
-                animate={{ rotate: ring.reverse ? 360 : -360 }}
-                transition={{ duration: ring.duration, repeat: Infinity, ease: 'linear' }}
+              <span
+                className={cn('group/chip relative flex', ring.reverse ? 'anim-spin' : 'anim-spin-rev')}
+                style={{ '--dur': `${ring.duration}s` }}
               >
                 <span
                   tabIndex={0}
@@ -57,11 +55,11 @@ function Ring({ ring, offset }) {
                 <span className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 translate-y-1 rounded-lg bg-ink-2 px-2.5 py-1 text-[11px] font-medium whitespace-nowrap text-white opacity-0 shadow-lg transition-all duration-200 group-hover/chip:translate-y-0 group-hover/chip:opacity-100 group-focus-within/chip:opacity-100">
                   {item.name}
                 </span>
-              </motion.span>
+              </span>
             </span>
           );
         })}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -84,11 +82,10 @@ export function IntegrationsOrbit() {
           ))}
           {/* Pulses travelling from the hub to the rings */}
           {[0, 1, 2].map((i) => (
-            <motion.span
+            <span
               key={i}
-              className="absolute top-1/2 left-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand/30"
-              animate={{ scale: [1, 5.2], opacity: [0.6, 0] }}
-              transition={{ duration: 4.5, delay: i * 1.5, repeat: Infinity, ease: 'easeOut' }}
+              className="anim-ripple absolute top-1/2 left-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand/30"
+              style={{ '--delay': `${i * 1.5}s` }}
             />
           ))}
           <div className="absolute top-1/2 left-1/2 flex size-24 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-[1.7rem] bg-white shadow-[0_30px_60px_-20px_rgba(25,76,255,0.55)] ring-1 ring-slate-200">

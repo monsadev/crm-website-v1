@@ -13,7 +13,10 @@ const offsets = {
   none: {},
 };
 
-// Fade + slide + unblur when the element scrolls into view.
+// Fade + slide when the element scrolls into view.
+// Only opacity and transform are animated: both run on the GPU, so reveals never
+// cause repaints during scroll. (`blur` is accepted for backwards compatibility and ignored.)
+// eslint-disable-next-line no-unused-vars
 export function Reveal({
   children,
   className,
@@ -22,7 +25,7 @@ export function Reveal({
   duration = 0.8,
   once = true,
   amount = 0.2,
-  blur = true,
+  blur,
   as = 'div',
   ...rest
 }) {
@@ -30,8 +33,8 @@ export function Reveal({
   return (
     <Comp
       className={className}
-      initial={{ opacity: 0, filter: blur ? 'blur(10px)' : 'blur(0px)', ...offsets[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, ...offsets[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
       viewport={{ once, amount }}
       transition={{ duration, delay, ease: EASE }}
       {...rest}
@@ -42,7 +45,16 @@ export function Reveal({
 }
 
 // Parent that staggers its <StaggerItem /> children.
-export function Stagger({ children, className, stagger = 0.09, delay = 0, once = true, amount = 0.15, as = 'div', ...rest }) {
+export function Stagger({
+  children,
+  className,
+  stagger = 0.09,
+  delay = 0,
+  once = true,
+  amount = 0.15,
+  as = 'div',
+  ...rest
+}) {
   const Comp = motion[as] || motion.div;
   return (
     <Comp
@@ -64,15 +76,8 @@ export function StaggerItem({ children, className, direction = 'up', as = 'div',
     <Comp
       className={className}
       variants={{
-        hidden: { opacity: 0, filter: 'blur(8px)', ...offsets[direction] },
-        visible: {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          scale: 1,
-          filter: 'blur(0px)',
-          transition: { duration: 0.75, ease: EASE },
-        },
+        hidden: { opacity: 0, ...offsets[direction] },
+        visible: { opacity: 1, x: 0, y: 0, scale: 1, transition: { duration: 0.75, ease: EASE } },
       }}
       {...rest}
     >

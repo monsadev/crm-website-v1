@@ -243,15 +243,12 @@ export function Pop({ children, delay = 0, className, y = 14, ...rest }) {
 }
 
 // Floating chip that bobs gently. Used to decorate hero shots.
+// CSS keyframe loop (GPU), so many floating chips cost nothing during scroll.
 export function Float({ children, className, delay = 0, amplitude = 10, duration = 5 }) {
   return (
-    <motion.div
-      className={className}
-      animate={{ y: [0, -amplitude, 0] }}
-      transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
-    >
+    <div className={cn('anim-bob', className)} style={{ '--amp': `${amplitude}px`, '--dur': `${duration}s`, '--delay': `${delay}s` }}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 

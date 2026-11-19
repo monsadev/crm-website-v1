@@ -34,11 +34,24 @@ export function RolesSection() {
                 onClick={() => setActiveId(r.id)}
                 className={cn(
                   'group relative flex items-center gap-4 overflow-hidden rounded-2xl border px-5 py-4 text-left transition-all duration-300',
-                  selected ? 'border-brand/30 bg-white shadow-[0_24px_50px_-26px_rgba(25,76,255,0.5)]' : 'border-slate-200 bg-white/60 hover:border-slate-300 hover:bg-white'
+                  selected
+                    ? 'border-brand/30 bg-white shadow-[0_24px_50px_-26px_rgba(25,76,255,0.5)]'
+                    : 'border-slate-200 bg-white/60 hover:border-slate-300 hover:bg-white',
                 )}
               >
-                {selected && <motion.span layoutId="role-bar" className="absolute inset-y-0 left-0 w-1 bg-brand" transition={{ type: 'spring', stiffness: 400, damping: 34 }} />}
-                <span className={cn('flex size-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300', selected ? 'bg-brand text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200')}>
+                {selected && (
+                  <motion.span
+                    layoutId="role-bar"
+                    className="absolute inset-y-0 left-0 w-1 bg-brand"
+                    transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span
+                  className={cn(
+                    'flex size-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300',
+                    selected ? 'bg-brand text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200',
+                  )}
+                >
                   <Icon name={r.icon} className="size-5" />
                 </span>
                 <span className="font-display text-[17px] font-medium text-ink-2">{r.title}</span>
@@ -54,14 +67,15 @@ export function RolesSection() {
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
-            className="pointer-events-none absolute -top-20 -right-20 size-72 rounded-full bg-brand/50 blur-[100px]"
+            className="glow-blob -top-40 -right-40 size-[30rem]"
+            style={{ '--glow-rgb': '25 76 255', '--glow-a': 0.5 }}
           />
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: EASE }}
               className="relative"
             >

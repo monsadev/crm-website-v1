@@ -20,6 +20,7 @@ import { Marquee } from '@/components/motion/Marquee';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion/Reveal';
 import { SecurityMockup } from '@/components/mockups/SecurityMockup';
 import { SectionHeading } from '@/components/sections/SectionHeading';
+import { Glow } from '@/components/motion/Glow';
 
 const stats = [
   { to: 3, suffix: '', label: 'Sign-in methods', sub: 'App, email or SMS' },
@@ -83,18 +84,8 @@ export function SecuritySection() {
   return (
     <section id="security" className="relative scroll-mt-24 overflow-hidden bg-ink py-24 text-white sm:py-32">
       <div className="bg-grid-dark mask-fade-y pointer-events-none absolute inset-0 opacity-50" />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/4 -left-40 size-[34rem] rounded-full bg-brand/30 blur-[140px]"
-        animate={{ x: [0, 50, 0], y: [0, 40, 0] }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-0 size-[30rem] rounded-full bg-violet-500/20 blur-[140px]"
-        animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-      />
+      <Glow color="brand" alpha={0.3} motion="drift" dur={16} dx={50} dy={40} className="top-[18%] -left-56 size-[46rem]" />
+      <Glow color="violet-dark" alpha={0.22} motion="drift" dur={18} dx={-50} dy={-30} className="-right-56 -bottom-20 size-[42rem]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-8">
         {/* Intro + live mockup */}

@@ -92,12 +92,7 @@ export function WhatsAppMockup({ className }) {
               className="flex w-14 items-center justify-center gap-1 self-start rounded-xl rounded-tl-sm bg-white py-2 shadow-sm"
             >
               {[0, 1, 2].map((d) => (
-                <motion.i
-                  key={d}
-                  className="size-1.5 rounded-full bg-slate-400"
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 0.9, repeat: Infinity, delay: d * 0.15 }}
-                />
+                <i key={d} className="anim-typing size-1.5 rounded-full bg-slate-400" style={{ '--delay': `${d * 0.15}s` }} />
               ))}
             </motion.div>
           </div>
